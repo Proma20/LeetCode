@@ -1,0 +1,35 @@
+class Solution {
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        int len = nums.size();
+        stack<int>monoSt;
+        long long minSum = 0;
+        long long maxSum = 0;
+        
+        for(int i = 0; i <= len; i++){
+            while(!monoSt.empty() && (i == len || nums[monoSt.top()] >= nums[i])){
+                auto right = i;
+                auto mid = monoSt.top();
+                monoSt.pop();
+                auto left = monoSt.empty() ? -1 : monoSt.top();
+                minSum += (right - mid) * (mid - left) * (long long)nums[mid];
+            }
+            monoSt.push(i);
+        }
+
+        monoSt.pop();
+        
+        for(int i = 0; i <= len; i++){
+            while(!monoSt.empty() && (i == len || nums[monoSt.top()] <= nums[i])){
+                auto right = i;
+                auto mid = monoSt.top();
+                monoSt.pop();
+                auto left = monoSt.empty() ? -1 : monoSt.top();
+                maxSum += (right - mid) * (mid - left) * (long long)nums[mid];
+            }
+            monoSt.push(i);
+        }
+        
+        return maxSum - minSum;
+    }
+};
