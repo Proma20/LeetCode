@@ -1,0 +1,66 @@
+class Solution {
+public:
+    string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {
+        vector<vector<int>>edges(100001);
+        int sLen = s.length();
+        int pLen = pairs.size();
+        vector<bool>visited(sLen);
+        vector<char>charOrder(sLen);
+        string ans;
+
+        for(int i = 0; i < sLen; i++){
+            charOrder[i] = '.';
+        }
+
+        for(int i = 0; i < pLen; i++){
+            auto temp = pairs[i];
+            edges[temp[0]].push_back(temp[1]);
+            edges[temp[1]].push_back(temp[0]);
+        }
+
+        for(int i = 0; i < sLen; i++){
+            if(!visited[i]){
+                BFS(i, visited, charOrder, edges, s);
+            }
+        }
+
+        for(int i = 0; i < sLen; i++){
+            ans.push_back(charOrder[i]);
+        }
+
+        return ans;
+    }
+
+    void BFS(int src, vector<bool>&visited, vector<char>&charOrder, vector<vector<int>>&edges, string s){
+        queue<int>q;
+        q.push(src);
+        visited[src] = true;
+        string temp = "";
+        vector<int>nodes;
+        vector<char>characters;
+        nodes.push_back(src);
+        characters.push_back(s[src]);
+
+        while(!q.empty()){
+            auto top = q.front();
+            q.pop();
+            for(auto elem : edges[top]){
+                if(!visited[elem]){
+                    visited[elem] = true;
+                    q.push(elem);
+                    nodes.push_back(elem);
+                    characters.push_back(s[elem]);
+                }
+            }
+        }
+
+        int n = nodes.size();
+        sort(nodes.begin(), nodes.begin() + n);
+        sort(characters.begin(), characters.begin() + n);
+
+        for(int i = 0; i < n; i++){
+            charOrder[nodes[i]] = characters[i];
+        }
+
+    }
+};
