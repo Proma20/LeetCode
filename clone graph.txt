@@ -1,0 +1,67 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if(node == NULL) return NULL;
+
+        map<int, Node*>nodeMap;
+        Node* newRoot = new Node();
+        BFS(node, nodeMap, newRoot);
+
+        return newRoot;
+    }
+
+    void BFS(Node* node, map<int, Node*>&nodeMap, Node* newRoot){
+        queue<Node*>q;
+         queue<Node*>cloneQ;
+        vector<bool>visited(101);
+
+        q.push(node);
+        visited[node->val] = true;   
+        newRoot->val = node->val;
+        cloneQ.push(newRoot);
+        nodeMap[newRoot->val] = newRoot;
+
+        while(!q.empty()){
+            auto temp = q.front();
+            q.pop();
+            auto cloneTemp = cloneQ.front();
+            cloneQ.pop();
+
+            for(auto child : temp->neighbors){
+                if(!visited[child->val]){
+                    q.push(child);
+                    visited[child->val] = true;
+                } 
+                if(nodeMap.find(child->val) == nodeMap.end()){
+                    Node* tempNode = new Node();
+                    tempNode->val = child->val;
+                    nodeMap[tempNode->val] = tempNode;
+                    cloneQ.push(tempNode);
+                }
+                cloneTemp->neighbors.push_back(nodeMap[child->val]);
+            }
+        }
+
+    }
+};
