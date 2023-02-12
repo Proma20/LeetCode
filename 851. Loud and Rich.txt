@@ -1,0 +1,57 @@
+class Solution {
+public:
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        int n = quiet.size();
+        int len = richer.size();
+        vector<int>answer(n + 1);
+        vector<vector<int>>outDegree(n + 1);
+        vector<int>inDegree(n + 1);
+
+        for(int i  = 0; i <= n; i++){
+            answer[i] = i;
+        }
+
+        for(auto edge : richer){
+            auto r = edge[0];
+            auto p = edge[1];
+            outDegree[r].push_back(p);
+            inDegree[p]++;
+        }
+
+        for(int i = 0; i < n; i++){
+            if(inDegree[i] == 0){
+                outDegree[n].push_back(i);
+            }
+        }
+        
+        quiet.push_back(n);
+        BFS(answer, quiet, outDegree, n);
+
+        answer.pop_back();
+
+        return answer;
+    }
+
+    void BFS(vector<int>&answer, vector<int>&quiet, vector<vector<int>>&outDegree, int root){
+        vector<bool>visited(root + 1);
+        queue<int>q;
+
+        q.push(root);
+        visited[root] = true;
+
+        while(!q.empty()){
+            auto parent = q.front();
+            q.pop();
+
+            for(auto child : outDegree[parent]){
+                if(!visited[child] || quiet[answer[child]] > quiet[answer[parent]]){
+                    visited[child] = true;
+                    q.push(child);
+                }
+                if(quiet[answer[child]] > quiet[answer[parent]]){
+                    answer[child] = answer[parent];
+                }
+            }
+        }
+    }
+};
