@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int repeatedStringMatch(string a, string b) {
+        int lenA = a.length();
+        int lenB = b.length();
+        map<char, bool>seenInA;
+
+        for(auto letter : a){
+            seenInA[letter] = true;
+        }
+
+        for(auto letter : b){
+            if(!seenInA[letter]) return -1;
+        }
+
+        int i = 0, j = 0;
+        int firstMatch = -1;
+        while(i < lenB){
+            if(b[i] == a[j % lenA]){
+                i++;
+                if(firstMatch == -1){
+                    firstMatch = j;
+                }
+            }
+            else{
+                i = 0;
+                j = firstMatch != -1 ? firstMatch : j;
+                firstMatch = -1;
+            }
+            j++;
+            if(j >= lenA && i == 0) return -1;
+        }
+
+        if(j % lenA == 0) return j / lenA;
+
+        else return (j / lenA) + 1;
+
+    }
+};
