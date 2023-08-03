@@ -1,0 +1,20 @@
+class Solution {
+public:
+// asked for number of distinct ways not steps. so basically n - 1th stair or n- 2 th stair e jotovabe jawa possible ota ber korte parle tar por ekta single 1 / 2 step jump diye nth step e jawa possible. ekhane combination er ar hishab nai. n - 1 th or n - 2 th theke direct jawar ekta korei upay. so duita add korle pawa jabe. fib series
+
+    int Fibonacci(int n){
+        int first = 0, second = 1, sum = 0;
+        int i = 1;
+        while(i <= n){
+            i++;
+            sum = first + second;
+            first = second;
+            second = sum;
+        }
+
+        return sum;
+    }
+    int climbStairs(int n) {
+        return Fibonacci(n);
+    }
+};
