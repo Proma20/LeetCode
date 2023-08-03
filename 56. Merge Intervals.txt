@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<pair<int, int>> pairIntervals;
+        vector<vector<int>> output;
+        
+        for(auto vec : intervals){
+            pair<int, int> intPair;
+            intPair.first = vec[0];
+            intPair.second = vec[1];
+            pairIntervals.push_back(intPair);
+        }
+
+        sort(pairIntervals.begin(), pairIntervals.end());
+
+        int len = pairIntervals.size();
+        int curr = 0;
+        int next = 0;
+        while(curr < len){
+            while(next < len && pairIntervals[curr].second >= pairIntervals[next].first){
+               pairIntervals[curr].second = max(pairIntervals[curr].second, pairIntervals[next].second);
+               next++;
+
+            }
+            vector<int>temp;
+            temp.push_back(pairIntervals[curr].first);
+            temp.push_back(pairIntervals[curr].second);
+            output.push_back(temp);
+            curr = next;
+            
+        }
+        return output;
+    }
+};
