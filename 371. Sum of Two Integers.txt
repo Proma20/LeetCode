@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int getSum(int a, int b) {
+        if(a == 0) return b;
+
+        if(b == 0) return a;
+        // xor takes care of sum without carry. to get carry we use and. The carry bit has to be added to the left bit that's why the left shift.
+        return getSum(a ^ b, (a&b) << 1);
+
+        
+    }
+};
