@@ -1,0 +1,21 @@
+class Solution {
+public:
+#Bin search. Compare with the last element to see if mid is greater equal it or not. If it is greater, means the max value lies on the right so update low. otherwsie the max value lies on the right.
+    int findMin(vector<int>& nums) {
+        int len = nums.size(), low = 0, high = len - 1;
+        int maxIndex = -1;
+        while(low <= high){
+            int mid =  (low + high) / 2;
+
+            if(nums[mid] <= nums[len - 1]){
+                high = mid - 1;
+            }
+            else{
+                low = mid + 1;
+                maxIndex = mid;
+            }
+        }
+        
+        return maxIndex == len - 1 ? nums[0] : nums[maxIndex + 1];
+    }
+};
