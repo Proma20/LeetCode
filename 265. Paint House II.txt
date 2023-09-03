@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int minCostII(vector<vector<int>>& costs) {
+        int k = costs[0].size();
+        int len = costs.size();
+        
+        pair<int, int> lowest(INT_MAX, -1);
+        pair<int, int> second_lowest(INT_MAX, -1);
+
+        for(int i = 0; i < k; i++){         
+            if(costs[0][i] < second_lowest.first){
+                second_lowest = {costs[0][i], i};
+            }
+
+            if(second_lowest < lowest){
+                swap(lowest,second_lowest);
+
+            }
+        }
+
+        for(int i = 1; i < len; i++){
+            pair<int, int> temp_lowest(INT_MAX, -1);
+            pair<int, int> temp_second_lowest(INT_MAX, -1);
+            for(int j = 0; j < k; j++){
+                auto valid_low = lowest.second == j ? second_lowest : lowest;
+                auto cost_so_far = valid_low.first + costs[i][j];
+                      
+                if(cost_so_far < temp_second_lowest.first)     {
+                    temp_second_lowest = {cost_so_far, j};
+                }
+                if(temp_second_lowest < temp_lowest){
+                    swap(temp_lowest,temp_second_lowest);
+                }
+            }
+
+            lowest = temp_lowest;
+            second_lowest = temp_second_lowest;
+        }
+
+        return lowest.first;
+    }
+};
