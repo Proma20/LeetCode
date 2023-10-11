@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int len =  nums.size();
+        int maxNumIndex = len - 1;
+        int left = 0;
+        int right=  len - 1;
+
+        while(left <= right){
+            auto mid = (left + right) / 2;
+            if(nums[mid] > nums[len - 1]){
+                left = mid + 1;
+                maxNumIndex = mid;
+            }
+            else{
+                right = mid - 1;
+            }
+        }
+
+        int ans = binSearch(nums, 0, maxNumIndex, target);
+
+        if(ans == - 1)
+            ans = binSearch(nums, maxNumIndex + 1, len - 1, target);
+
+        return ans;
+    }
+
+    int binSearch(vector<int>&nums, int s_index, int e_index, int target){
+        int left = s_index;
+        int right = e_index;
+
+        while(left <= right){
+            auto mid = (left + right) / 2;
+            if(nums[mid] == target) return mid;
+
+            else if(target > nums[mid]) left = mid + 1;
+
+            else right = mid - 1;
+        }
+
+        return -1;
+    }
+};
