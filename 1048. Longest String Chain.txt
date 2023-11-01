@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        int len = words.size();
+        vector<vector<string>>wordListByLen(17);
+        map<string, int>chainLength;
+        int ans = 1;
+        
+        for(auto word : words){
+            auto wLen = word.length();
+            wordListByLen[wLen].push_back(word);
+        }
+        
+        for(int i = 1; i < 17; i++){
+            for(auto parent : wordListByLen[i]){
+                if(chainLength.find(parent) == chainLength.end()){
+                    chainLength[parent] = 1;
+                }
+                if(i == 16) break;
+                
+                for(auto child : wordListByLen[i+1]){
+                    if(isPredecessor(parent, child)){
+                        chainLength[child] = max(chainLength[child], chainLength[parent] + 1);
+                        ans = max(ans, chainLength[child]);
+                    }
+                }
+            }
+        }
+        
+
+        return ans;
+    }
+
+    bool isPredecessor(string parent, string child){
+        int left = 0;
+
+        for(int i = 0; i < child.size(); i++){
+            if(parent[left] == child[i]){
+                left++;
+                if(left == parent.length()) break;
+            }
+        }
+        
+        return left == parent.length();
+    }
+};
