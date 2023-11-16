@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int countBalls(int lowLimit, int highLimit) {
+        map<int, int>boxBallFreq;
+        int maxBallFreq = 1;
+
+        for(int i = lowLimit; i <= highLimit; i++){
+            auto dSum = digitSum(i);
+
+            if(boxBallFreq.find(dSum) != boxBallFreq.end()){
+                boxBallFreq[dSum] += 1;
+                maxBallFreq = max(maxBallFreq, boxBallFreq[dSum]);
+            }
+            else{
+                boxBallFreq[dSum] = 1;
+            }
+        }
+
+        return maxBallFreq;
+    }
+
+    int digitSum(int n){
+        int sum = 0;
+
+        while(n > 0){
+            sum += n % 10;
+            n /= 10;
+        }
+
+        return sum;
+    }
+};
